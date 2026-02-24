@@ -17,7 +17,10 @@ public class Persona {
   //
   // Constructors
   //
-  public Persona () { };
+  public Persona (String nombre, Auto auto) {
+    this.nombre = nombre;
+    this.auto = auto;
+  };
   
   //
   // Methods
@@ -68,6 +71,7 @@ public class Persona {
    */
   public void mostrarAuto()
   {
+   System.out.println(auto.getMarca());
   }
 
 

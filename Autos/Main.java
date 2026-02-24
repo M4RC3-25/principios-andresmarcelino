@@ -31,8 +31,14 @@ public class Main {
   /**
    * @param        args
    */
-  public void nueva_operaci_n(String args)
+  public static void main(String[] args)
   {
+
+  Auto auto = new Auto("Toyota");
+  Persona persona = new Persona("Adolfo", auto);
+
+  persona.mostrarAuto();
+
   }
 
 
