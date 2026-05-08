@@ -436,37 +436,6 @@ public interface ComentarioRepository
 }
 \end{lstlisting}
 
-\subsection{Patrón MVC (Model-View-Controller)}
-
-\subsubsection{Definición}
-
-El patrón \textbf{MVC} divide la aplicación en tres capas: el \textbf{Modelo} maneja los datos, la \textbf{Vista} muestra la interfaz al usuario, y el \textbf{Controlador} recibe las peticiones y coordina entre los otros dos.
-
-\subsubsection{Aplicación en dos niveles}
-
-En este proyecto, MVC se aplica en dos niveles simultáneos:
-
-\begin{itemize}[leftmargin=1.5cm]
-  \item \textbf{Backend (Spring Boot)}: las entidades JPA son el Modelo, los \texttt{@RestController} son los Controladores, y el JSON que retorna la API es la representación de la Vista.
-  \item \textbf{Frontend (Flutter)}: los widgets de Flutter son la Vista que consume la API y muestra los datos; \texttt{tweet\_service.dart} actúa como el intermediario.
-\end{itemize}
-
-\subsubsection{Diagrama de flujo MVC}
-
-\begin{verbatim}
-Flutter (Vista)           Spring Boot (Controlador)   PostgreSQL (Modelo)
-     |                            |                          |
-     |-- GET /tweets -----------> |                          |
-     |                            |-- findAll() -----------> |
-     |                            |<-- List<Tweet> --------- |
-     |<-- JSON [tweets] --------- |                          |
-     |                            |                          |
-     |-- POST /tweets ---------> |                          |
-     |  {nombre, descripcion...}  |-- save(tweet) --------> |
-     |                            |<-- Tweet guardado ------- |
-     |<-- JSON {tweet creado} --- |                          |
-\end{verbatim}
-
 \subsection{Patrón de Diseño Facade (mencionado como extensión)}
 
 Aunque en este proyecto los controladores acceden directamente a los repositorios por simplicidad, el patrón \textbf{Facade} es una extensión natural que se podría aplicar. Este patrón proporciona una interfaz simplificada a un conjunto de interfaces en un subsistema.
