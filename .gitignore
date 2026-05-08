@@ -1,0 +1,9 @@
+frontend/build/
+backend/target/
+*.apk
+*.aab
+*.class
+*.jar
+.idea/
+*.iml
+.dart_tool/
