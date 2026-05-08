@@ -1,0 +1,816 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{mdframed}
+
+\geometry{
+  top=2.5cm,
+  bottom=2.5cm,
+  left=3cm,
+  right=2.5cm
+}
+
+% Colores para código
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.97}
+\definecolor{darkgreen}{rgb}{0.0,0.4,0.0}
+\definecolor{lightgreen}{rgb}{0.9,1.0,0.9}
+
+\lstdefinestyle{javastyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single,
+    rulecolor=\color{black!30}
+}
+
+\lstdefinestyle{dartstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single,
+    rulecolor=\color{black!30}
+}
+
+\lstdefinestyle{propsstyle}{
+    backgroundcolor=\color{backcolour},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{black!30}
+}
+
+% Encabezado y pie de página
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small PlantApp --- Documentación Técnica}
+\fancyhead[R]{\small Parcial 2 --- Mayo 2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Estilo de títulos
+\titleformat{\section}{\large\bfseries\color{darkgreen}}{\ thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{\ thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\ thesubsubsection}{1em}{}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkgreen,
+    urlcolor=blue,
+    citecolor=darkgreen
+}
+
+
+\begin{document}
+
+
+\begin{titlepage}
+  \centering
+  \vspace*{1.5cm}
+  {\Huge\bfseries PlantApp\par}
+  \vspace{0.4cm}
+  {\Large Red Social de Plantas vs.\ Zombies\par}
+  \vspace{0.3cm}
+  \rule{0.8\linewidth}{0.5pt}
+  \vspace{0.5cm}
+
+  {\large\bfseries Documentación Técnica --- Parcial 2\par}
+  \vspace{1.2cm}
+
+  \begin{tcolorbox}[colback=lightgreen,colframe=darkgreen,width=0.75\textwidth]
+    \centering
+    \textbf{Autor:} Andrés Marcelino Escobar\\[4pt]
+    \textbf{Profesor:} Adolfo Centeno\\[4pt]
+    \textbf{Entrega:} 8 de Mayo de 2026
+  \end{tcolorbox}
+
+  \vspace{1.2cm}
+  {\large Flutter \textbar\ Spring Boot \textbar\ PostgreSQL \textbar\ Docker \textbar\ Render\par}
+  \vspace{0.6cm}
+  {\normalsize Principios de Diseño de Software\par}
+  \vfill
+  {\small Universidad --- Ingeniería en Sistemas\par}
+\end{titlepage}
+
+
+\tableofcontents
+\newpage
+
+
+\section{Descripción General del Proyecto}
+
+\textbf{PlantApp} es una aplicación móvil y web de tipo red social temática, construida alrededor del universo de \textit{Plants vs.\ Zombies}. Su objetivo principal es permitir a los usuarios registrar, compartir y explorar información detallada sobre plantas del juego: sus nombres, fotografías, descripciones, ataques, biografías, precios y tiempos de recarga.
+
+La aplicación permite a cualquier usuario con cuenta publicar una ``tarjeta de planta'', reaccionar a las publicaciones de otros usuarios con emojis al estilo de Facebook (like, love, haha, wow, sad, angry) y dejar comentarios de texto. Cada usuario puede gestionar únicamente sus propias publicaciones y comentarios, garantizando así integridad y control de contenido.
+
+El backend está construido con \textbf{Spring Boot 4} y expone una API REST completa. La base de datos es \textbf{PostgreSQL} alojada en la nube mediante \textbf{Aiven}. El frontend fue desarrollado con \textbf{Flutter}, compilado tanto para web como para APK de Android. El backend se desplegó en \textbf{Render} mediante una imagen \textbf{Docker}.
+
+\subsection{Motivación}
+
+Plants vs.\ Zombies es uno de los juegos de estrategia más reconocidos a nivel global. Construir una red social temática alrededor de él permite practicar el desarrollo full-stack completo —desde la capa de datos hasta la interfaz móvil— en un contexto familiar y entretenido, al tiempo que se aplican patrones de diseño y principios de programación orientada a objetos de manera concreta y visible.
+
+\subsection{Estructura General del Proyecto}
+
+\begin{verbatim}
+proyecto-tweeter/
+ +-- backend/               (Spring Boot + Maven)
+ |    +-- src/main/java/com/tweeter/backend/
+ |    |    +-- models/      (Entidades JPA)
+ |    |    +-- repository/  (Repositorios Spring Data)
+ |    |    +-- controllers/ (Controladores REST)
+ |    +-- Dockerfile
+ |    +-- pom.xml
+ +-- frontend/              (Flutter)
+      +-- lib/
+           +-- services/    (Capa de acceso a la API)
+           +-- main.dart    (UI completa)
+\end{verbatim}
+
+
+\section{Tecnologías Utilizadas}
+
+\begin{longtable}{>{\bfseries}p{4cm} p{9.5cm}}
+\toprule
+Tecnología & Uso en el proyecto \\
+\midrule
+\endhead
+Flutter (Dart) & Interfaz de usuario: web y APK Android \\
+Spring Boot 4 & Framework backend, expone la API REST \\
+PostgreSQL 17 & Base de datos relacional en producción (Aiven) \\
+Hibernate / JPA & Mapeo objeto-relacional de entidades \\
+Docker & Contenedorización del backend para despliegue \\
+Render & Plataforma de despliegue en la nube \\
+Aiven & Servicio administrado de PostgreSQL \\
+Maven & Gestión de dependencias y build de Java \\
+\bottomrule
+\caption{Stack tecnológico del proyecto}
+\end{longtable}
+
+
+\section{Principios de Diseño Utilizados}
+
+A lo largo del desarrollo de PlantApp se aplicaron de forma deliberada varios principios fundamentales de la ingeniería de software. Estos principios guiaron las decisiones de arquitectura y organización del código tanto en el backend como en el frontend.
+
+\subsection{Principio de Responsabilidad Única (SRP)}
+
+El \textbf{Principio de Responsabilidad Única} (Single Responsibility Principle), parte de los principios SOLID, establece que una clase debe tener \textit{una única razón para cambiar}. En otras palabras, cada clase debe encargarse de una sola responsabilidad dentro del sistema.
+
+\subsubsection{Aplicación en el Backend}
+
+En el backend, este principio se respetó al separar completamente las responsabilidades en capas distintas:
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{Modelos} (\texttt{Tweet}, \texttt{Usuario}, \texttt{Reaccion}, \texttt{Comentario}): solo representan la estructura de datos y su mapeo a la base de datos. No contienen lógica de negocio.
+  \item \textbf{Repositorios} (\texttt{TweetRepository}, \texttt{UsuarioRepository}, etc.): solo se encargan del acceso a datos.
+  \item \textbf{Controladores} (\texttt{TweetController}, \texttt{AuthController}, etc.): solo manejan las peticiones HTTP y delegan el trabajo a los repositorios.
+\end{itemize}
+
+Por ejemplo, \texttt{TweetController} no sabe cómo se guarda un dato en la base de datos; eso es responsabilidad de \texttt{TweetRepository}. Si mañana cambia el proveedor de base de datos, solo se modifica el repositorio, no el controlador.
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Separación de responsabilidades en TweetController]
+@RestController
+@RequestMapping("/tweets")
+@CrossOrigin(origins = "*")
+public class TweetController {
+
+    // Solo conoce al repositorio, no sabe nada de la DB
+    @Autowired
+    private TweetRepository repo;
+
+    @GetMapping
+    public List<Tweet> getAll() {
+        return repo.findAll(); // delega la responsabilidad
+    }
+
+    @PostMapping
+    public Tweet create(@RequestBody Tweet t) {
+        return repo.save(t);
+    }
+}
+\end{lstlisting}
+
+\subsubsection{Aplicación en el Frontend}
+
+En Flutter, la responsabilidad de comunicarse con la API se separó completamente de la UI. El archivo \texttt{tweet\_service.dart} centraliza todas las llamadas HTTP, mientras que \texttt{main.dart} solo construye widgets y reacciona a eventos del usuario.
+
+Si la URL del backend cambia (por ejemplo, de desarrollo a producción), solo se modifica \texttt{tweet\_service.dart}, sin tocar ningún widget.
+
+\begin{lstlisting}[style=dartstyle, language=Java, caption=Separación entre servicio y UI en Flutter]
+// tweet_service.dart - SOLO responsabilidad de HTTP
+Future<List<dynamic>> getTweets() async {
+  final response = await http.get(Uri.parse('$baseUrl/tweets'));
+  if (response.statusCode == 200) return jsonDecode(response.body);
+  throw Exception('Error al cargar');
+}
+
+// main.dart - SOLO responsabilidad de UI
+Future<void> _cargarTweets() async {
+  final data = await getTweets(); // delega al servicio
+  setState(() => tweets = data);
+}
+\end{lstlisting}
+
+\subsection{Principio Abierto/Cerrado (OCP)}
+
+El \textbf{Principio Abierto/Cerrado} establece que las entidades de software deben estar \textit{abiertas para extensión, pero cerradas para modificación}.
+
+En este proyecto, el uso de \texttt{JpaRepository} como interfaz base para todos los repositorios es un ejemplo directo de este principio. Spring Data JPA provee una implementación completa sin necesidad de modificar ninguna clase existente. Cuando fue necesario agregar consultas personalizadas, bastó con declarar nuevos métodos en la interfaz sin tocar la implementación:
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Extensión sin modificación en UsuarioRepository]
+// Se extiende JpaRepository sin modificar nada interno
+@Repository
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    // Nueva funcionalidad agregada SIN modificar la clase base
+    Optional<Usuario> findByUsername(String username);
+}
+\end{lstlisting}
+
+Del mismo modo, cuando se agregaron las entidades \texttt{Reaccion} y \texttt{Comentario}, no fue necesario modificar \texttt{TweetController} ni \texttt{TweetRepository}; simplemente se crearon nuevos controladores y repositorios independientes.
+
+\subsection{Principio de Inversión de Dependencias (DIP)}
+
+El \textbf{Principio de Inversión de Dependencias} establece que los módulos de alto nivel no deben depender de los módulos de bajo nivel; ambos deben depender de abstracciones.
+
+En Spring Boot, este principio se implementa automáticamente mediante la inyección de dependencias con \texttt{@Autowired}. Los controladores no instancian sus repositorios directamente (lo que generaría acoplamiento fuerte), sino que Spring los inyecta en tiempo de ejecución:
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Inversión de dependencias mediante @Autowired]
+@RestController
+public class TweetController {
+
+    // Spring inyecta la implementacion concreta en runtime
+    // El controlador solo conoce la ABSTRACCION (interfaz)
+    @Autowired
+    private TweetRepository repo; // interfaz, no clase concreta
+
+    @Autowired
+    private ReaccionRepository reaccionRepo;
+}
+\end{lstlisting}
+
+Si en el futuro se cambia la implementación de \texttt{TweetRepository} (por ejemplo, para usar MongoDB en lugar de PostgreSQL), el controlador no requiere ningún cambio.
+
+\subsection{Principio DRY (Don't Repeat Yourself)}
+
+El principio \textbf{DRY} establece que \textit{cada pieza de conocimiento debe tener una representación única, no ambigua y autoritativa dentro del sistema}.
+
+En el frontend, la URL base del backend se definió una sola vez en \texttt{tweet\_service.dart} como constante:
+
+\begin{lstlisting}[style=dartstyle, language=Java, caption=Constante central que evita repetición]
+// Definida UNA sola vez
+const String baseUrl = 'https://plantapp-api.onrender.com';
+
+// Todos los metodos la reutilizan
+Future<List<dynamic>> getTweets() async {
+  final response = await http.get(Uri.parse('$baseUrl/tweets'));
+  ...
+}
+
+Future<void> createTweet(Map<String, dynamic> data) async {
+  await http.post(Uri.parse('$baseUrl/tweets'), ...);
+}
+\end{lstlisting}
+
+Cuando fue necesario cambiar de \texttt{localhost:8080} a la URL de producción en Render, bastó con modificar \textit{una sola línea} en todo el proyecto.
+
+En el backend, el método constructor de widgets \texttt{\_campo()} en el formulario de nueva planta evita repetir la declaración de cada \texttt{TextField}:
+
+\begin{lstlisting}[style=dartstyle, language=Java, caption=Método auxiliar que elimina repetición en formularios]
+// SIN DRY habria que repetir este bloque 7 veces
+Widget _campo(String label, TextEditingController ctrl,
+    {int maxLines = 1, TextInputType tipo = TextInputType.text}) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: TextField(
+      controller: ctrl,
+      maxLines: maxLines,
+      keyboardType: tipo,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder()
+      ),
+    ),
+  );
+}
+
+// USO: una sola linea por campo
+_campo('Nombre', _nombreCtrl),
+_campo('Descripcion', _descripCtrl, maxLines: 2),
+_campo('Precio', _precioCtrl, tipo: TextInputType.number),
+\end{lstlisting}
+
+\subsection{Principio KISS (Keep It Simple, Stupid)}
+
+El principio \textbf{KISS} propone que los sistemas funcionan mejor cuando se mantienen simples. La simplicidad debe ser un objetivo clave en el diseño.
+
+En este proyecto, la decisión de no implementar JWT ni Spring Security completo fue una aplicación consciente de KISS. Para el alcance del parcial, la autenticación se maneja con verificación directa de usuario y contraseña en el controlador, eliminando capas de complejidad innecesarias:
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Autenticación simple y directa (principio KISS)]
+@PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody Usuario u) {
+    Optional<Usuario> encontrado =
+        repo.findByUsername(u.getUsername());
+
+    // Verificacion directa, sin tokens ni sesiones complejas
+    if (encontrado.isEmpty() ||
+        !encontrado.get().getPassword().equals(u.getPassword())) {
+        return ResponseEntity.status(401)
+            .body(Map.of("error", "Credenciales incorrectas"));
+    }
+
+    return ResponseEntity.ok(Map.of(
+        "mensaje", "Login exitoso",
+        "username", encontrado.get().getUsername()
+    ));
+}
+\end{lstlisting}
+
+\subsection{Principio de Separación de Intereses (Separation of Concerns)}
+
+Este principio establece que un programa debe dividirse en secciones distintas, donde cada una aborda una preocupación o aspecto separado del comportamiento del software.
+
+En PlantApp, los intereses están claramente separados en capas:
+
+\begin{center}
+\begin{tabular}{>{\bfseries}p{3.5cm} p{9cm}}
+\toprule
+Capa & Responsabilidad \\
+\midrule
+Modelos & Estructura de los datos y mapeo a tablas \\
+Repositorios & Acceso y persistencia de datos \\
+Controladores & Manejo de peticiones HTTP y respuestas \\
+Flutter Services & Comunicación con la API REST \\
+Flutter Widgets & Presentación visual e interacción con el usuario \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Esta separación permite que, por ejemplo, el equipo de frontend trabaje en la UI sin necesidad de conocer cómo funciona internamente la base de datos, y viceversa.
+
+
+\section{Patrones de Diseño Utilizados}
+
+\subsection{Patrón Repository}
+
+\subsubsection{Definición}
+
+El patrón \textbf{Repository} actúa como una colección de objetos en memoria. En lugar de escribir SQL directamente en la lógica de negocio, se crea una interfaz que define qué operaciones se pueden realizar sobre cada entidad. Spring Data JPA genera automáticamente la implementación a partir del nombre de los métodos.
+
+\subsubsection{Beneficio principal}
+
+El código de negocio no sabe \textit{cómo} se obtienen los datos, solo \textit{qué} datos necesita. Esto desacopla completamente la lógica de negocio del mecanismo de persistencia.
+
+\subsubsection{Repositorios implementados}
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=TweetRepository]
+@Repository
+public interface TweetRepository extends JpaRepository<Tweet, Long> {
+    // Spring genera automaticamente todos los metodos CRUD
+    // findAll(), save(), deleteById(), findById()...
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=UsuarioRepository con consulta personalizada]
+@Repository
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    // Spring genera: SELECT * FROM usuarios WHERE username = ?
+    Optional<Usuario> findByUsername(String username);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=ReaccionRepository con consultas derivadas]
+@Repository
+public interface ReaccionRepository extends JpaRepository<Reaccion, Long> {
+    List<Reaccion> findByTweetId(Long tweetId);
+    Optional<Reaccion> findByTweetIdAndAutor(Long tweetId, String autor);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=ComentarioRepository]
+@Repository
+public interface ComentarioRepository
+    extends JpaRepository<Comentario, Long> {
+    List<Comentario> findByTweetId(Long tweetId);
+}
+\end{lstlisting}
+
+\subsection{Patrón MVC (Model-View-Controller)}
+
+\subsubsection{Definición}
+
+El patrón \textbf{MVC} divide la aplicación en tres capas: el \textbf{Modelo} maneja los datos, la \textbf{Vista} muestra la interfaz al usuario, y el \textbf{Controlador} recibe las peticiones y coordina entre los otros dos.
+
+\subsubsection{Aplicación en dos niveles}
+
+En este proyecto, MVC se aplica en dos niveles simultáneos:
+
+\begin{itemize}[leftmargin=1.5cm]
+  \item \textbf{Backend (Spring Boot)}: las entidades JPA son el Modelo, los \texttt{@RestController} son los Controladores, y el JSON que retorna la API es la representación de la Vista.
+  \item \textbf{Frontend (Flutter)}: los widgets de Flutter son la Vista que consume la API y muestra los datos; \texttt{tweet\_service.dart} actúa como el intermediario.
+\end{itemize}
+
+\subsubsection{Diagrama de flujo MVC}
+
+\begin{verbatim}
+Flutter (Vista)           Spring Boot (Controlador)   PostgreSQL (Modelo)
+     |                            |                          |
+     |-- GET /tweets -----------> |                          |
+     |                            |-- findAll() -----------> |
+     |                            |<-- List<Tweet> --------- |
+     |<-- JSON [tweets] --------- |                          |
+     |                            |                          |
+     |-- POST /tweets ---------> |                          |
+     |  {nombre, descripcion...}  |-- save(tweet) --------> |
+     |                            |<-- Tweet guardado ------- |
+     |<-- JSON {tweet creado} --- |                          |
+\end{verbatim}
+
+\subsection{Patrón de Diseño Facade (mencionado como extensión)}
+
+Aunque en este proyecto los controladores acceden directamente a los repositorios por simplicidad, el patrón \textbf{Facade} es una extensión natural que se podría aplicar. Este patrón proporciona una interfaz simplificada a un conjunto de interfaces en un subsistema.
+
+La implementación de una clase \texttt{TweetFacade} centralizaría la coordinación entre \texttt{TweetRepository}, \texttt{ReaccionRepository} y \texttt{ComentarioRepository}, reduciendo el acoplamiento de los controladores:
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Estructura de TweetFacade como extensión futura]
+@Service
+public class TweetFacade {
+    private final TweetRepository tweetRepository;
+    private final ComentarioRepository comentarioRepository;
+    private final ReaccionRepository reaccionRepository;
+
+    // Constructor injection (DIP aplicado)
+    public TweetFacade(TweetRepository tweetRepo,
+                       ComentarioRepository comentRepo,
+                       ReaccionRepository reaccionRepo) {
+        this.tweetRepository = tweetRepo;
+        this.comentarioRepository = comentRepo;
+        this.reaccionRepository = reaccionRepo;
+    }
+
+    public Comentario agregarComentario(Long tweetId, String texto) {
+        Tweet tweet = tweetRepository.findById(tweetId)
+            .orElseThrow(() -> new RuntimeException(
+                "Tweet no encontrado: " + tweetId));
+        Comentario c = new Comentario();
+        c.setTweetId(tweetId);
+        c.setContenido(texto);
+        return comentarioRepository.save(c);
+    }
+}
+\end{lstlisting}
+
+
+\section{Modelos / Entidades JPA}
+
+Los modelos son clases Java anotadas con \texttt{@Entity} que Hibernate mapea automáticamente a tablas de PostgreSQL. La anotación \texttt{spring.jpa.hibernate.ddl-auto=update} permite que las tablas se creen o actualicen automáticamente al iniciar la aplicación.
+
+\subsection{Tweet.java --- Entidad principal}
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Entidad Tweet con todos los campos de la planta]
+@Entity
+@Table(name = "tweets")
+public class Tweet {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombre;       // Nombre de la planta
+    private String imagenUrl;    // URL de la fotografia
+    private String descripcion;  // Descripcion general
+    private String ataque;       // Tipo de ataque
+    private String biografia;    // Historia de la planta
+    private Double precio;       // Costo en soles de sol
+    private String recarga;      // Tiempo de recarga
+    private String autor;        // Usuario que la publico
+    private Integer reacciones = 0; // Contador legacy
+
+    // Getters y Setters...
+}
+\end{lstlisting}
+
+\subsection{Usuario.java}
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Entidad Usuario]
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)  // Username unico en la DB
+    private String username;
+
+    private String password;
+
+    // Getters y Setters...
+}
+\end{lstlisting}
+
+\subsection{Reaccion.java}
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Entidad Reaccion con tipo emoji]
+@Entity
+@Table(name = "reacciones")
+public class Reaccion {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long tweetId;
+    private String autor;
+    // Tipos posibles: LIKE, LOVE, HAHA, WOW, SAD, ANGRY
+    private String tipo;
+
+    // Getters y Setters...
+}
+\end{lstlisting}
+
+\subsection{Comentario.java}
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Entidad Comentario]
+@Entity
+@Table(name = "comentarios")
+public class Comentario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long tweetId;
+    private String autor;
+    private String contenido;
+
+    // Getters y Setters...
+}
+\end{lstlisting}
+
+
+\section{Endpoints de la API REST}
+
+\begin{longtable}{>{\ttfamily\footnotesize}p{1.5cm} >{\ttfamily\footnotesize}p{5cm} p{6cm}}
+\toprule
+\normalfont\textbf{Método} & \normalfont\textbf{Ruta} & \normalfont\textbf{Descripción} \\
+\midrule
+\endhead
+\multicolumn{3}{l}{\textbf{Autenticación}} \\
+\midrule
+POST & /auth/register & Registrar nuevo usuario \\
+POST & /auth/login & Iniciar sesión \\
+\midrule
+\multicolumn{3}{l}{\textbf{Plantas (Tweets)}} \\
+\midrule
+GET  & /tweets & Obtener todas las plantas \\
+POST & /tweets & Crear nueva planta \\
+DELETE & /tweets/\{id\}?autor=X & Eliminar planta (solo autor) \\
+\midrule
+\multicolumn{3}{l}{\textbf{Reacciones}} \\
+\midrule
+GET  & /reacciones/\{tweetId\} & Obtener reacciones de una planta \\
+POST & /reacciones & Agregar/cambiar/quitar reacción \\
+\midrule
+\multicolumn{3}{l}{\textbf{Comentarios}} \\
+\midrule
+GET  & /comentarios/\{tweetId\} & Listar comentarios de una planta \\
+POST & /comentarios & Agregar comentario \\
+DELETE & /comentarios/\{id\}?autor=X & Eliminar comentario (solo autor) \\
+\bottomrule
+\caption{Endpoints completos de la API REST}
+\end{longtable}
+
+
+\section{Arquitectura y Despliegue}
+
+\subsection{Diagrama de arquitectura}
+
+\begin{verbatim}
+  [Dispositivo Android / Navegador Web]
+              |
+         Flutter APK / Web
+              |  HTTPS / REST
+              v
+  +-------------------------------------+
+  |  Render (plantapp-api.onrender.com) |
+  |  +-------------------------------+  |
+  |  |     Docker Container          |  |
+  |  |  Spring Boot 4 + Maven        |  |
+  |  |  Puerto 8080                  |  |
+  |  +-------------------------------+  |
+  +-------------------------------------+
+              |  JDBC + SSL
+              v
+  +-------------------------------------+
+  |  Aiven Cloud (PostgreSQL 17)        |
+  |  Tablas: tweets, usuarios,          |
+  |          reacciones, comentarios    |
+  +-------------------------------------+
+\end{verbatim}
+
+\subsection{Configuración de base de datos}
+
+La conexión a Aiven se configura mediante variables de entorno en Render, siguiendo el principio de no hardcodear credenciales en el código fuente:
+
+\begin{lstlisting}[style=propsstyle, caption=application.properties con configuración de Aiven]
+spring.datasource.url=jdbc:postgresql://HOST:PORT/DATABASE?sslmode=require
+spring.datasource.username=avnadmin
+spring.datasource.password=*****
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+server.port=8080
+\end{lstlisting}
+
+El parámetro \texttt{?sslmode=require} es obligatorio en Aiven para garantizar que la conexión sea cifrada.
+
+\subsection{Dockerfile}
+
+\begin{lstlisting}[style=propsstyle, caption=Dockerfile del backend]
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+\end{lstlisting}
+
+El proceso de despliegue sigue estos pasos:
+
+\begin{enumerate}
+  \item \texttt{mvn clean package -DskipTests} genera el archivo \texttt{.jar}
+  \item \texttt{docker build} construye la imagen con OpenJDK 17
+  \item \texttt{docker push andriuwu/plantapp-api} sube la imagen a Docker Hub
+  \item Render descarga la imagen y la ejecuta como servicio web
+\end{enumerate}
+
+\subsection{Compilación del APK}
+
+Para el frontend móvil, Flutter compila la misma base de código para múltiples plataformas:
+
+\begin{lstlisting}[style=propsstyle, caption=Comandos de compilación Flutter]
+# Cambiar URL a produccion antes de compilar
+# En tweet_service.dart:
+# const String baseUrl = 'https://plantapp-api.onrender.com';
+
+flutter build apk --release
+# Genera: build/app/outputs/flutter-apk/app-release.apk
+
+flutter build web --release
+# Genera: build/web/
+\end{lstlisting}
+
+
+\section{Funcionalidades de la Aplicación}
+
+\subsection{Autenticación}
+
+Los usuarios pueden registrarse con un nombre de usuario y contraseña únicos. El sistema valida que el username no esté duplicado antes de crear la cuenta. El login verifica credenciales y redirige a la pantalla principal al éxito.
+
+\subsection{Publicación de plantas}
+
+El formulario de nueva planta incluye los siguientes campos en orden:
+
+\begin{enumerate}
+  \item \textbf{Nombre} (obligatorio): nombre de la planta del juego
+  \item \textbf{Fotografía de planta}: URL de imagen pública
+  \item \textbf{Descripción}: resumen de la planta
+  \item \textbf{Ataque}: tipo y descripción del ataque
+  \item \textbf{Biografía}: historia de la planta en el universo del juego
+  \item \textbf{Precio}: costo en soles de sol (numérico)
+  \item \textbf{Recarga}: tiempo de recarga expresado en texto
+\end{enumerate}
+
+\subsection{Sistema de reacciones}
+
+Inspirado en las reacciones de Facebook, cada planta puede recibir seis tipos de reacción:
+
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+Emoji & Tipo \\
+\midrule
+(pulgar arriba) & LIKE \\
+(corazon) & LOVE \\
+(risa) & HAHA \\
+(sorpresa) & WOW \\
+(triste) & SAD \\
+(enojado) & ANGRY \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Cada usuario puede tener solo una reacción activa por planta. Si reacciona dos veces con el mismo emoji, la reacción se elimina. Si reacciona con uno diferente, la reacción se actualiza. La lógica de toggle se implementa en el backend:
+
+\begin{lstlisting}[style=javastyle, language=Java, caption=Lógica de toggle de reacciones]
+@PostMapping
+public ResponseEntity<?> reaccionar(@RequestBody Reaccion r) {
+    Optional<Reaccion> existente =
+        repo.findByTweetIdAndAutor(r.getTweetId(), r.getAutor());
+
+    if (existente.isPresent()) {
+        Reaccion re = existente.get();
+        if (re.getTipo().equals(r.getTipo())) {
+            repo.delete(re); // misma reaccion -> quitar
+            return ResponseEntity.ok(Map.of("accion", "eliminada"));
+        } else {
+            re.setTipo(r.getTipo()); // diferente -> cambiar
+            repo.save(re);
+            return ResponseEntity.ok(Map.of("accion", "cambiada"));
+        }
+    }
+    repo.save(r); // nueva reaccion
+    return ResponseEntity.ok(Map.of("accion", "agregada"));
+}
+\end{lstlisting}
+
+\subsection{Comentarios}
+
+Cada publicación tiene una sección de comentarios desplegable. Cualquier usuario autenticado puede comentar en cualquier planta. Los usuarios solo pueden eliminar sus propios comentarios, validado tanto en el frontend (ocultando el botón) como en el backend (verificando el autor antes de borrar).
+
+
+\section{Problemas Encontrados y Soluciones}
+
+Durante el desarrollo se presentaron varios problemas técnicos relevantes desde el punto de vista de ingeniería de software:
+
+\begin{longtable}{p{5cm} p{8cm}}
+\toprule
+\textbf{Problema} & \textbf{Solución aplicada} \\
+\midrule
+\endhead
+El backend arrancaba y se cerraba inmediatamente & Faltaba la dependencia \texttt{spring-boot-starter-web} en \texttt{pom.xml} \\
+Las dependencias estaban fuera del bloque \texttt{<dependencies>} & Corrección del XML malformado en \texttt{pom.xml} \\
+Los archivos Java estaban en la raíz del proyecto & Movidos a \texttt{src/main/java/com/tweeter/backend/} \\
+La imagen se recortaba en lugar de redimensionarse & Cambio de \texttt{BoxFit.cover} a \texttt{BoxFit.contain} en Flutter \\
+Tweets sin autor no podían eliminarse & Eliminación temporal de la validación para limpiar datos huérfanos \\
+CORS bloqueaba las peticiones desde Flutter web & Anotación \texttt{@CrossOrigin(origins = ``*'')} en los controladores \\
+Conexión rechazada a Aiven & Faltaba el parámetro \texttt{?sslmode=require} en la URL JDBC \\
+\bottomrule
+\caption{Problemas encontrados durante el desarrollo}
+\end{longtable}
+
+
+\section{Conclusión}
+
+PlantApp demostró que es posible construir una aplicación full-stack funcional, desplegada en la nube y compilada como APK de Android, aplicando de forma consistente los principios fundamentales de diseño de software.
+
+El \textbf{Principio de Responsabilidad Única} mantuvo cada clase enfocada en una sola tarea, lo que facilitó enormemente la depuración de errores: cuando el backend no arrancaba, era evidente que el problema estaba en la capa de configuración, no en los controladores ni en los modelos.
+
+El principio \textbf{DRY} redujo la cantidad de código repetido, especialmente visible en el método \texttt{\_campo()} de Flutter y en la constante \texttt{baseUrl}, que permitió cambiar de entorno de desarrollo a producción en Render con una sola modificación.
+
+La \textbf{Separación de Intereses} entre el servicio HTTP de Flutter y los widgets de UI permitió que la interfaz evolucionara (agregando reacciones, comentarios, campos nuevos) sin necesidad de reescribir la lógica de comunicación con el backend.
+
+El \textbf{Patrón Repository} de Spring Data JPA eliminó por completo la necesidad de escribir SQL, reduciendo el riesgo de errores y acelerando el desarrollo. El \textbf{Patrón MVC}, aplicado en dos niveles simultáneos (backend y frontend), garantizó que ambas capas pudieran desarrollarse y modificarse de forma independiente.
+
+En conjunto, estos principios y patrones no son conceptos abstractos: fueron decisiones concretas que resolvieron problemas reales durante el desarrollo de esta práctica.
+
+\vspace{1cm}
+\begin{flushright}
+\textit{Andrés Marcelino Escobar}\\
+\textit{Principios de Diseño de Software --- Mayo 2026}
+\end{flushright}
+
+\end{document}
+\end{antml:parameter>

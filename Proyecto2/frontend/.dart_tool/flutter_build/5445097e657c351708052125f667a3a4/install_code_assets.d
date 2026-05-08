@@ -1,0 +1,1 @@
+ /home/m4rc3/Documentos/frontend/.dart_tool/flutter_build/5445097e657c351708052125f667a3a4/native_assets.json: 

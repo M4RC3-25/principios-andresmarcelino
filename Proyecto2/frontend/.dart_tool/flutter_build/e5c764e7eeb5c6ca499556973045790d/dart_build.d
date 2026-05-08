@@ -1,0 +1,1 @@
+ /home/m4rc3/Documentos/frontend/.dart_tool/flutter_build/e5c764e7eeb5c6ca499556973045790d/dart_build_result.json: 
